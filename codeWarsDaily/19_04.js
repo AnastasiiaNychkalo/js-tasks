@@ -50,3 +50,17 @@ function countPositivesSumNegatives(input) {
    }
    return [amount, sum]
 }
+
+// Інший варіант рішення
+// function countPositivesSumNegatives(input) {
+//    if (!Array.isArray(input) || input.length === 0) return [];
+
+//    return input.reduce(
+//       ([pos, neg], num) => {
+//       if (num > 0) return [pos + 1, neg];
+//       if (num < 0) return [pos, neg + num];
+//       return [pos, neg];
+//       },
+//       [0, 0]
+//    );
+// }
