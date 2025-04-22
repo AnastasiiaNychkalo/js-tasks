@@ -29,3 +29,12 @@ function arraySqure(array) {
 }
 
 console.log(arraySqure([1, 2, 3]));
+
+function filter_list(l) {
+   l.map(function(val) {
+   if (val === Number) {
+      return l.push(val)
+   } 
+   return 
+   })
+}
