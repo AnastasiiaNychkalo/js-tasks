@@ -1,0 +1,29 @@
+body {
+   text-align: center;
+   max-width: 1200px;
+}
+
+h1 {
+   color: rgb(255, 0, 17);
+}
+
+form {
+   margin-bottom: 30px;
+}
+
+.cards {
+   max-width: 1200px;
+   display: grid;
+   grid-template-columns: repeat(3, minmax(380px, 380px));
+   grid-template-rows: repeat(1, 380px);
+   gap: 10px;
+   justify-self: center;
+   overflow: hidden;
+   /* display: flex;
+   flex-direction: row;
+   overflow: hidden; */
+}
+
+img {
+   max-width: 380px;
+}
