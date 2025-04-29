@@ -14,16 +14,17 @@ form {
 .cards {
    max-width: 1200px;
    display: grid;
-   grid-template-columns: repeat(3, minmax(380px, 380px));
-   grid-template-rows: repeat(1, 380px);
+   grid-template-columns: repeat(3, minmax(400px, 500px));
+   grid-template-rows: repeat(1, 500px);
    gap: 10px;
    justify-self: center;
-   overflow: hidden;
-   /* display: flex;
-   flex-direction: row;
-   overflow: hidden; */
 }
 
 img {
    max-width: 380px;
+}
+
+p {
+   max-height: 100px;
+   overflow: scroll;
 }
