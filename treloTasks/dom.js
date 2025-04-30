@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 // Завдання 0:
 
 // Створіть динамічну галерею зображень з наступними функціональностями:
@@ -11,51 +11,87 @@
 
 // Перехід між зображеннями в lightbox режимі.
 
-const input = document.getElementsByTagName('input');
-let inputArray = [...input];
-const buttonAdd = document.getElementsByClassName('add')[0];
-const picture = document.getElementsByClassName('img1')[0];
-const discription = document.getElementsByClassName('text1')[0];
-const cardOne = document.querySelector('.cards');
-const divOne = document.querySelector('.card'); 
+const inputs = document.getElementsByTagName("input");
+const buttonAdd = document.querySelector(".add");
+const cardsContainer = document.querySelector(".cards");
+const previewBox = document.querySelector(".preview-box");
+const previewImg = previewBox.querySelector("img");
+const previewText = previewBox.querySelector("p");
+const closeIcon = document.querySelector(".icon");
+const shadow = document.querySelector(".shadow");
+const prevBtn = document.querySelector(".slide.prev button");
+const nextBtn = document.querySelector(".slide.next button");
 
-console.log(inputArray);
+let images = [];
+let currentIndex = 0;
 
-let count = 1;
+buttonAdd.addEventListener("click", (e) => {
+  e.preventDefault();
+  const url = inputs[0].value.trim();
+  const description = inputs[1].value.trim();
+  if (!url) return;
 
-buttonAdd.addEventListener('click', () => {
-  const url = inputArray[0].value;
-  if (!picture.src || picture.src === window.location.href) {
-    picture.src = url;
-    discription.textContent = inputArray[1].value;
-    let closeButton = document.createElement('button');
-    closeButton.textContent = "X";
-    discription.after(closeButton);
-    closeButton.style.position = "relative";
-    closeButton.style.top = "-430px";
-    closeButton.style.right = "-190px";
-    closeButton.addEventListener('click', () => {
-      divOne.remove();
-    })
-  } else {
-    let div = document.createElement('div');
-    div.className = `card${(count += 1)}`;
-    cardOne.append(div);
-    let img = document.createElement('img');
-    img.src = url;
-    div.appendChild(img);
-    let p = document.createElement('p');
-    p.textContent = inputArray[1].value;
-    div.appendChild(p);
-    let closeButton = document.createElement('button');
-    closeButton.textContent = "X";
-    closeButton.style.position = "relative";
-    closeButton.style.top = "-430px";
-    closeButton.style.right = "-190px";
-    div.appendChild(closeButton);
-    closeButton.addEventListener('click', () => {
-      div.remove();
-    })
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  const img = document.createElement("img");
+  img.src = url;
+  img.alt = description;
+  img.classList.add("gallery-img");
+
+  const p = document.createElement("p");
+  p.textContent = description;
+
+  const closeButton = document.createElement("button");
+  closeButton.textContent = "X";
+  closeButton.style.position = "relative";
+  closeButton.style.top = "-30px";
+  closeButton.style.right = "-160px";
+
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(closeButton);
+  cardsContainer.appendChild(card);
+
+  images.push({ url, description });
+  const imgIndex = images.length - 1;
+
+  closeButton.addEventListener("click", () => {
+    card.remove();
+    images.splice(imgIndex, 1);
+  });
+
+  img.addEventListener("click", () => {
+    currentIndex = images.findIndex((item) => item.url === img.src);
+    showPreview(currentIndex);
+  });
+
+  inputs[0].value = "";
+  inputs[1].value = "";
+});
+
+function showPreview(index) {
+  previewImg.src = images[index].url;
+  previewText.textContent = images[index].description;
+  previewBox.classList.add("show");
+  shadow.style.display = "block";
+}
+
+closeIcon.addEventListener("click", () => {
+  previewBox.classList.remove("show");
+  shadow.style.display = "none";
+});
+
+prevBtn.addEventListener("click", () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showPreview(currentIndex);
   }
 });
 
+nextBtn.addEventListener("click", () => {
+  if (currentIndex < images.length - 1) {
+    currentIndex++;
+    showPreview(currentIndex);
+  }
+});
