@@ -62,7 +62,9 @@ h1 {
    margin: auto;
 }
 
-
+.calendar-container__title::first-letter {
+   text-transform: uppercase;
+}
 
 .next, .prev {
    border: none;
@@ -84,11 +86,6 @@ th {
    border-bottom: 1px solid black;
 }
 
-/* td:hover {
-   background-color: rgb(122, 177, 219);
-   border-radius: 100%;
-} */
-
 .td-click {
    background-color: rgb(122, 177, 219);
    border-radius: 100%;
@@ -104,7 +101,7 @@ th {
    flex-direction: column;
    justify-content: space-between;
    padding: 20px;
-   width: 300px;
+   width: 330px;
 }
 
 form {
@@ -115,11 +112,13 @@ form {
 
 .current-date {
    font-size: 40px;
+   margin: 0;
 }
 
 .events-header {
    font-weight: bold;
    font-size: 40px;
+   margin: 0;
 }
 
 input {
@@ -136,4 +135,14 @@ input {
    border-color: rgb(70, 100, 123);
    background-color: rgb(122, 177, 219);
    color: black;
+}
+
+ul {
+   height: 190px;
+   overflow: scroll;
+   margin: 0;
+}
+
+li {
+   font-size: 19px;
 }
