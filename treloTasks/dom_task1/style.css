@@ -1,0 +1,148 @@
+*, ::before, ::after {
+   box-sizing: border-box;
+}
+
+a, button {
+   text-decoration: none;
+   color: #FFFFFF;
+   border: none;
+}
+
+ul, ol, li {
+   list-style: none;
+}
+
+html, body {
+   height: 100%;
+}
+
+h1,h2,h3,h4,h5,h6 {
+   font-weight: inherit;
+   font-size: inherit;
+}
+
+.wrapper {
+   min-height: 100%;
+   overflow: hidden;
+   display: flex;
+   flex-direction: column;
+   margin: 0 auto;
+   padding: 0 30px 0 30px;
+   background-color: aliceblue;
+}
+
+h1 {
+   font-size: 50px;
+   text-align: center;
+}
+
+.page {
+   display: flex;
+   justify-content: space-evenly;
+}
+
+/* ----- Calendar ------ */
+
+.calendar-container {
+   border: 1px solid rgb(107, 102, 102);
+   padding: 30px;
+   border-radius: 40px;
+   background-color: #FFFFFF;
+}
+
+.calendar-container__head {
+   display: flex;
+   flex-direction: row;
+}
+
+.calendar-container__title {
+   font-size: 45px;
+   text-align: center;
+   font-weight: bold;
+   margin: auto;
+}
+
+.calendar-container__title::first-letter {
+   text-transform: uppercase;
+}
+
+.next, .prev {
+   border: none;
+   background-color: #FFFFFF;
+}
+
+.calendar-container__table {
+   width: 100%;
+   border-collapse: collapse;
+}
+
+td, th {
+   font-size: 40px;
+   padding: 10px 20px;
+   text-align: center;
+}
+
+th {
+   border-bottom: 1px solid black;
+}
+
+.td-click {
+   background-color: rgb(122, 177, 219);
+   border-radius: 100%;
+}
+
+/* ----- Events ------ */
+
+.events-container {
+   background-color: #FFFFFF;
+   border: 1px solid rgb(107, 102, 102);
+   border-radius: 40px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   padding: 20px;
+   width: 330px;
+}
+
+form {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+
+.current-date {
+   font-size: 40px;
+   margin: 0;
+}
+
+.events-header {
+   font-weight: bold;
+   font-size: 40px;
+   margin: 0;
+}
+
+input {
+   border: 1px solid black;
+   border-radius: 50px;
+   height: 40px;
+   padding-left: 10px;
+}
+
+.button-add {
+   border: 1px solid;
+   border-radius: 50px;
+   height: 40px;
+   border-color: rgb(70, 100, 123);
+   background-color: rgb(122, 177, 219);
+   color: black;
+}
+
+ul {
+   height: 190px;
+   overflow: scroll;
+   margin: 0;
+}
+
+li {
+   font-size: 19px;
+}
