@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=\, initial-scale=1.0">
+   <title>Document</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <h1>Create Gallery</h1>
+   <form action="#">
+      <input type="url" name="userphoto" placeholder="Input Url">
+      <input type="text" name="userdiscription" placeholder="Description">
+      <button class="add" type="submit">Add</button>
+   </form>
+   <div class="cards"></div>
+   <div class="preview-box">
+      <span class="icon">X</span>
+      <div class="image-box">
+         <div class="slide prev"><button>prev</button></div>
+         <div class="slide next"><button>next</button></div>
+         <img src="#" alt="">
+         <p></p>
+      </div>
+   </div>
+   <div class="shadow"></div>
+   <script src="../dom.js"></script>
+</body>
+</html>
