@@ -11,7 +11,9 @@
 
 // Перехід між зображеннями в lightbox режимі.
 
-const inputs = document.getElementsByTagName("input");
+"use strict";
+const inputUrl = document.querySelector("input[name='url']");
+const inputDesc = document.querySelector("input[name='description']");
 const buttonAdd = document.querySelector(".add");
 const cardsContainer = document.querySelector(".cards");
 const previewBox = document.querySelector(".preview-box");
@@ -25,12 +27,17 @@ const nextBtn = document.querySelector(".slide.next button");
 let images = [];
 let currentIndex = 0;
 
-buttonAdd.addEventListener("click", (e) => {
-  e.preventDefault();
-  const url = inputs[0].value.trim();
-  const description = inputs[1].value.trim();
-  if (!url) return;
 
+function isValidUrl(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function createCard(url, description) {
   const card = document.createElement("div");
   card.classList.add("card");
 
@@ -44,34 +51,31 @@ buttonAdd.addEventListener("click", (e) => {
 
   const closeButton = document.createElement("button");
   closeButton.textContent = "X";
-  closeButton.style.position = "relative";
-  closeButton.style.top = "-30px";
-  closeButton.style.right = "-160px";
+  closeButton.classList.add("close-button");
 
-  card.appendChild(img);
-  card.appendChild(p);
-  card.appendChild(closeButton);
-  cardsContainer.appendChild(card);
-
-  images.push({ url, description });
-  const imgIndex = images.length - 1;
 
   closeButton.addEventListener("click", () => {
+    const indexToDelete = images.findIndex((item) => item.url === img.src);
+    if (indexToDelete !== -1) images.splice(indexToDelete, 1);
     card.remove();
-    images.splice(imgIndex, 1);
   });
+
 
   img.addEventListener("click", () => {
     currentIndex = images.findIndex((item) => item.url === img.src);
     showPreview(currentIndex);
   });
 
-  inputs[0].value = "";
-  inputs[1].value = "";
-});
+  card.appendChild(img);
+  card.appendChild(p);
+  card.appendChild(closeButton);
+  return card;
+}
+
 
 function showPreview(index) {
   previewImg.src = images[index].url;
+  previewImg.alt = images[index].description;
   previewText.textContent = images[index].description;
   previewBox.classList.add("show");
   shadow.style.display = "block";
@@ -82,16 +86,34 @@ closeIcon.addEventListener("click", () => {
   shadow.style.display = "none";
 });
 
+
 prevBtn.addEventListener("click", () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    showPreview(currentIndex);
-  }
+  if (images.length === 0) return;
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  showPreview(currentIndex);
 });
 
 nextBtn.addEventListener("click", () => {
-  if (currentIndex < images.length - 1) {
-    currentIndex++;
-    showPreview(currentIndex);
+  if (images.length === 0) return;
+  currentIndex = (currentIndex + 1) % images.length;
+  showPreview(currentIndex);
+});
+
+
+buttonAdd.addEventListener("click", (e) => {
+  e.preventDefault();
+  const url = inputUrl.value.trim();
+  const description = inputDesc.value.trim();
+
+  if (!url || !description || !isValidUrl(url)) {
+    alert("Будь ласка, введіть коректний URL та опис.");
+    return;
   }
+
+  const card = createCard(url, description);
+  cardsContainer.appendChild(card);
+  images.push({ url, description });
+
+  inputUrl.value = "";
+  inputDesc.value = "";
 });
