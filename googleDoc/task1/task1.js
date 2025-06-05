@@ -30,95 +30,123 @@
 // Введи різноманітність монстрів з унікальними властивостями та атаками.
 // Реалізуй систему інвентаря, де гравець може зберігати та використовувати знайдені предмети.
 
-const player = {
-  name: "Player",
-  health: 100,
-  strength: 100,
-  medicine: [],
-  inventory: [],
-  level: 1,
-  attack: function attack(enemy) {
+class Player {
+  constructor(name) {
+    this.name = name;
+    this.health = 100;
+    this.strength = 50;
+    this.medicine = [];
+    this.inventory = [];
+    this.level = 1;
+  }
+
+  attack(enemy) {
     alert(`${this.name} атакує ${enemy.kind} на ${this.strength} урону.`);
     enemy.health -= this.strength;
-  },
-  heal: function heal() {
+  }
+
+  heal() {
     if (this.medicine.length > 0) {
       this.health += 10;
-      this.medicine.shift();
+      if (this.health > 100) this.health = 100;
+      this.medicine.pop();
       alert(`${this.name} лікується. Поточне здоровʼя: ${this.health}`);
     } else {
       alert("У вас немає ліків!");
     }
-  },
-};
+  }
 
-function createMonster(kind, health, strength) {
-  return {
-    kind,
-    health,
-    strength,
-    attack(enemy) {
-      alert(`${this.kind} атакує ${enemy.name} на ${this.strength} урону.`);
-      enemy.health -= this.strength;
-    },
-  };
+  levelUp() {
+    this.level++;
+    this.strength += 5;
+    this.health = 100;
+  }
+
+  status() {
+    return `${this.name} | Здоров'я: ${this.health} | Сила: ${this.strength} | Рівень: ${this.level}`;
+  }
 }
 
-function createItem(name, type) {
-  return {
-    name,
-    type,
-    effect(player) {
-      if (type === "weapon") {
-        player.strength += 5;
-        alert("Сила збільшена на 5.");
-      } else {
-        player.medicine.push(name);
-      }
-    },
-  };
+class Monster {
+  constructor(kind, health, strength) {
+    this.kind = kind;
+    this.health = health;
+    this.strength = strength;
+  }
+
+  attack(enemy) {
+    alert(`${this.kind} атакує ${enemy.name} на ${this.strength} урону.`);
+    enemy.health -= this.strength;
+  }
+
+  takeDamage(amount) {
+    this.health -= amount;
+  }
+
+  status() {
+    return `${this.kind} | Здоров'я: ${this.health} | Сила: ${this.strength}`;
+  }
 }
 
-function battle(monster) {
-  while (player.health > 0 && monster.health > 0) {
-    player.attack(monster);
-    if (monster.health <= 0) {
-      alert(`${monster.kind} переможено!`);
-      player.level++;
-      player.strength += 2;
-      alert(`Рівень підвищено! Тепер рівень: ${player.level}`);
-      break;
-    }
-    monster.attack(player);
-    if (player.health <= 0) {
-      alert(`${player.name} загинув.`);
-      return;
+class Item {
+  constructor(name, type) {
+    this.name = name;
+    this.type = type;
+  }
+
+  effect(player) {
+    if (this.type === "weapon") {
+      player.strength += 5;
+      alert("Сила збільшена на 5.");
+    } else if (this.type === "med") {
+      player.medicine.push(this);
+      alert(`${player.name} отримав ліки ${this.name}`);
     }
   }
 }
 
-function playTurn(currentMonster) {
-  const action = prompt("Що ви хочете зробити? (атака/лікування/предмет)");
-  if (action === "атака") {
-    battle(currentMonster);
-  } else if (action === "лікування") {
-    player.heal();
-    battle(currentMonster);
-  } else if (action === "предмет") {
-    if (player.inventory.length > 0) {
-      player.inventory[0].effect(player);
-      player.inventory.shift();
+function battle(player, monster) {
+  while (player.health > 0 && monster.health > 0) {
+    alert(player.status());
+    alert(monster.status());
+
+    const action = prompt(
+      "Що ви хочете зробити? (атака/лікування/предмет)"
+    ).toLowerCase();
+
+    if (action === "атака") {
+      player.attack(monster);
+    } else if (action === "лікування") {
+      player.heal();
+    } else if (action === "предмет") {
+      if (player.inventory.length > 0) {
+        const item = player.inventory.shift();
+        item.effect(player);
+      } else {
+        alert("Предметів немає");
+      }
     } else {
-      alert("Предметів немає");
+      alert("Невідома команда");
     }
-    battle(currentMonster);
+
+    if (monster.health > 0) {
+      monster.attack(player);
+    }
+  }
+  if (player.health <= 0) {
+    alert("Ви загинули. Гру завершено.");
+    return false;
+  } else {
+    alert(`Ви перемогли ${monster.kind}!`);
+    player.levelUp();
+    return true;
   }
 }
 
 const monster = [
-  createMonster("Blip", 30, 5),
-  createMonster("Gog", 50, 10),
-  createMonster("Klagg", 200, 15),
+  new Monster("Blip", 30, 5),
+  new Monster("Gog", 50, 10),
+  new Monster("Klagg", 200, 100),
 ];
 
 function randomMonster() {
@@ -127,9 +155,9 @@ function randomMonster() {
 }
 
 const item = [
-  createItem("Зілля", "weapon"),
-  createItem("pills", "med"),
-  createItem("knife", "weapon"),
+  new Item("Зілля", "med"),
+  new Item("Кинжал", "weapon"),
+  new Item("Сокира", "weapon"),
 ];
 
 function randomItem() {
@@ -137,26 +165,27 @@ function randomItem() {
   return item[index];
 }
 
-function gameLoop() {
-  const name = prompt("Як тебе звати?");
-  player.name = name;
-  alert("Гра почалась!");
-  playTurn();
-  while (player.health > 0) {
-    const meet = Math.floor(Math.random() * 10) + 1;
+function gameStart() {
+  const playerName = prompt("Ваше ім'я");
+  const player = new Player(playerName);
 
-    if (meet > 6) {
-      const currentMonster = randomMonster();
-      alert(`Ви зутсріли ${currentMonster.kind}.`);
-      playTurn(currentMonster);
-      // battle(currentMonster);
+  alert("Гра починається");
+
+  while (player.health > 0) {
+    const encounter = Math.floor(Math.random() * 10) + 1;
+
+    if (encounter < 6) {
+      const monster = randomMonster();
+      alert(`Ви зустріли монстра ${monster.kind}!`);
+      const survived = battle(player, monster);
+      if (!survived) break;
     } else {
-      const findItem = randomItem();
-      alert(`Ви знайшли ${findItem.name}`);
-      createItem(findItem);
+      const item = randomItem();
+      alert(`Ви знайшли предмет: ${item.name}`);
+      player.inventory.push(item);
     }
   }
-  alert("Гру завершено.Ваш рівень: ${player.level}`");
+  alert(`Кінець гри. Ваш рівень: ${player.level}`);
 }
 
-gameLoop();
+gameStart();
