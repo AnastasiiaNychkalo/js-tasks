@@ -36,6 +36,20 @@ function printArray(array) {
 // or
 // [West]
 
+function dirReduc(directions) {
+  const opposites = {
+    NORTH: 'SOUTH',
+    SOUTH: 'NORTH',
+    EAST: 'WEST',
+    WEST: 'EAST',
+  };
+
+  return directions.reduce((stack, dir) => 
+    stack.at(-1) === opposites[dir] ? stack.slice(0, -1) : [...stack, dir], 
+    []
+  );
+}
+
 function dirReduc(arr) {
   const opposites = {
     NORTH: "SOUTH",
